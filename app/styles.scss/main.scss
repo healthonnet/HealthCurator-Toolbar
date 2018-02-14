@@ -1,0 +1,131 @@
+.certificateLink {
+  position: relative;
+  background-size: cover;
+  cursor: pointer;
+  margin: 0 5px 0 5px;
+  display: none !important;
+  &.valid {
+    display: inline-block !important;
+  }
+}
+.honcode-logo-tall {
+  width: 20px;
+  height: 25px;
+  background-image: url('#{$chromePrefix}/images/honcode/hon-logo.png');
+}
+
+.honcode-logo-wide {
+  width: 48px;
+  height: 12px;
+  background-image: url('#{$chromePrefix}/images/honcode/hon-medline.png');
+}
+
+.honPopup {
+  all: initial;
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  margin: 0;
+  padding: 0;
+  z-index: 9999;
+  vertical-align: middle;
+  width: 290px;
+
+  background-color: white;
+  box-shadow: 4px 4px 4px rgba(160, 160, 160, 0.7);
+  border: 1px solid #e4e4e4 !important;
+
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+  cursor: pointer;
+  -webkit-user-select: none;
+
+  h4 {
+    text-align: center;
+    margin-bottom: 0;
+    margin-top: 35px;
+    font-weight: bold;
+    line-height: 1em;
+    font-size: 100%;
+  }
+
+  .k-infos {
+    width: 150px;
+    display: table-cell !important;
+    vertical-align: top;
+  }
+
+  .principles {
+    width: 150px;
+    ul {
+      padding: 10px 0;
+      margin-left: 30px;
+      margin-bottom: 0;
+      list-style: none;
+
+      li {
+        margin-bottom: 0;
+
+        &:before {
+          content: "✓";
+          color: green;
+          margin-right: 9px;
+          margin-left: -20px;
+          font-size: 1.1em;
+        }
+      }
+    }
+    border-left: 1px solid #e4e4e4;
+  }
+
+  .trustability {
+    width: 120px;
+    padding: 0 10px;
+    .honTrust {
+      background-image: url('#{$chromePrefix}/images/honcode/hon-logo.png');
+      position: relative;
+      background-size: cover;
+      display: inline-block;
+      height: 100px;
+      width: 80px;
+      margin-left: 20px;
+      margin-top: 10px;
+    }
+
+    .circle {
+      display: inline-block;
+      vertical-align: top;
+      margin-top: 5px;
+      margin-left: 20px;
+      padding-bottom: 10px;
+      canvas {
+        margin: 0 30%;
+      }
+    }
+    .hon+h4 {
+      margin-top: 10px;
+      color: green;
+    }
+  }
+
+  .honPopup-header {
+    position: absolute;
+    top: 0;
+    width: 270px;
+    background: url('#{$chromePrefix}/images/icon-48.png') top left no-repeat;
+    margin: 0;
+    text-align: right;
+    color: #A5A4A4;
+    background-color: white;
+    border-bottom: 1px solid #e4e4e4;
+    font-size: 13px;
+    padding: 5px 15px 10px 5px;
+    background-position: 4px 4px;
+    background-size: 8%;
+  }
+  p {
+    white-space: normal;
+    font-size: 0.8em;
+    margin-left: 5px;
+  }
+}

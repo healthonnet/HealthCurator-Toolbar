@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>healthCurator Toolbar</title>
+    <!-- build:css styles/bundle.css -->
+    <link rel="stylesheet" href="./lib/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./lib/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="./lib/flag-css/dist/css/flag-css.min.css">
+    <link rel="stylesheet" href="./lib/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="./styles/popup.css">
+    <!-- endbuild -->
+</head>
+<body>
+  <div class="header">
+    <h1>Health Curator</h1>
+    <p id="view-certificate"></p>
+  </div>
+
+  <div id="certification" class="certification-grey">
+    <div class="col-xs-8">
+      <h2 id="certification-header"></h2>
+      <h3 id="certification-domain">Ratings :
+        <div class="rating">
+          <div class="stars-outer">
+            <div class="stars-inner"></div>
+          </div>
+        </div>
+      </h3>
+    </div>
+    <div class="col-xs-4 known">
+      <a id="curator-link" href="#" target="_blank" class="btn btn-primary">See on Health Curator</a>
+    </div>
+    <div class="col-xs-4 unknown">
+      <i class="fa fa-question-circle"></i>
+    </div>
+  </div>
+
+  <div id="badges">
+    <div class="row">
+      <div class="col-xs-4 cell border-right border-bottom" id="country">
+      </div>
+      <div class="col-xs-4 cell border-right border-bottom" id="type">
+      </div>
+      <div class="col-xs-4 cell border-bottom" id="cookie-badge">
+      </div>
+    </div>
+  </div>
+
+  <div class="search container">
+    <h2 id="khresmoi"></h2>
+    <form role="form" action="https://www.healthcurator.org/browser" class="form-inline text-center" method="get" target="_blank">
+      <div class="form-group">
+        <input type="text" class="form-control" autocomplete="off" name="search" id="q">
+      </div>
+      <div class="form-group">
+        <button type="submit" class="btn btn-primary" id="searchSubmit"></button>
+      </div>
+    </form>
+  </div>
+
+  <div class="footer">
+    <span id="donate" class="pull-left"></span>
+    <span class="pull-right">
+      © 2018 - <a href="https://healthcurator.org/" target="_blank">Health Curator</a>
+    </span>
+  </div>
+
+  <!-- build:js scripts/bundle.js -->
+  <script src="./lib/jquery/dist/jquery.min.js"></script>
+  <script src="./lib/moment/min/moment-with-locales.min.js"></script>
+  <script src="./lib/bootstrap/dist/js/bootstrap.min.js"></script>
+  <script src="./scripts/utils/tld.js"></script>
+  <script src="./scripts/curator.js"></script>
+  <script src="./scripts/popup.js"></script>
+  <!-- endbuild -->
+
+</body>
+</html>

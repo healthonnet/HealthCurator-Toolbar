@@ -68,25 +68,38 @@ a:hover {
   }
 }
 
+#loginForm {
+  padding-top: 35px;
+  padding-bottom: 50px;
+}
+
 #certification {
+
   color: white;
-  min-height: 103px;
-  h2, h3 {
-    text-align: center;
+  min-height: 114px;
+  .col-xs-6 {
+    display: table-cell;
+    vertical-align: top;
   }
+
   h2 {
-    padding: 25px 0 10px 0;
-    font-weight: 300;
+    padding: 15px 0 10px 0;
     font-size: 18pt;
+    font-weight: bold;
+    max-width: 100%;
+    text-overflow: ellipsis;
+    overflow: hidden;
   }
   h3 {
     font-weight: 400;
     font-size: 12pt;
-    padding-bottom: 25px;
+    padding-bottom: 10px;
   }
 }
 
 .rating {
+  font-size: 25pt;
+
   .stars-outer {
     display: inline-block;
     position: relative;
@@ -108,7 +121,7 @@ a:hover {
 
   .stars-inner::before {
     content: "\f005 \f005 \f005 \f005 \f005";
-    color: #f8ce0b;
+    color: #f1c40f;
   }
 }
 

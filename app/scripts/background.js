@@ -22,3 +22,38 @@ if (chrome.omnibox) {
 chrome.browserAction.onClicked.addListener(function(tab) {
 
 });
+
+var loginState = function() {
+  // TODO Get stored Token
+  var token = undefined;
+  if (!token) {
+    return chrome.runtime.sendMessage({
+      msg: 'requireLogin',
+      reason: 'logout'
+    });
+  }
+
+  // TODO Try token validity
+  var isValid = true;
+
+  if (isValid) {
+    return chrome.runtime.sendMessage({
+      msg: "loginToken",
+      token: token,
+    });
+  } else {
+    return chrome.runtime.sendMessage({
+      msg: 'requireLogin',
+      reason: 'expired'
+    });
+  }
+
+};
+
+chrome.runtime.onMessage.addListener(
+  function(request, sender, sendResponse){
+    if(request.msg == "checkLogin") {
+      loginState();
+    }
+  }
+);

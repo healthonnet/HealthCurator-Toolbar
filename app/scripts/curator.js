@@ -49,6 +49,7 @@ var curator = {
 
   setBadges: function(link) {
     const prettyLink = curator.getDomainFromUrl(link);
+    console.log(link,prettyLink);
     if (prettyLink !== 'null.null') {
       $('#certification-header').text(prettyLink);
 
@@ -60,7 +61,6 @@ var curator = {
         $('#certification .known').css('display', 'block');
         $('#certification .unknown').css('display', 'none');
 
-        console.log(response);
         const infos = response.data;
         $('#curator-link').attr('href', HEALTHCURATOR_API + '/browser/' + infos.id);
         if (infos.ratings !== undefined && infos.ratings !== '0') {
@@ -104,6 +104,7 @@ var curator = {
       }
     }
 
+
     /*
     hon_listHON.checkURL(hon_listHON.formatHREF(link)).then(function(code) {
       if (code !== '' && code !== undefined) {
@@ -133,6 +134,78 @@ var curator = {
       $('[data-toggle="tooltip"]').tooltip();
     });
     */
+  },
+
+  showReviewForm: (user) => {
+    $('#mainPopup').html(
+      $('<div>', {id: 'reviewForm'}).append(
+        $('<div>', {class: 'form-group'}).append(
+          $('<input>', {
+            class: 'form-control signin-field',
+            name: 'login',
+            type: 'text',
+            placeholder: 'Enter your email',
+            id: 'signin-email'
+          })
+        ).append(
+          $('<label>', {
+            class: 'signin-field-icon fui-mail',
+            for: 'signin-email'
+          }).text('email')
+        )
+      )
+    );
+  },
+
+  showLoginForm: (reason) => {
+    var imgURL = chrome.extension.getURL('/images/icon-128.png');
+
+    $('#mainPopup').html(
+      $('<div>', {
+        id: 'loginForm',
+        class: 'col-xs-12'
+      }).append(
+        $('<img>', {
+          class: 'center-block col-xs-4',
+          src: imgURL
+        })
+      ).append(
+        $('<div>', {class: 'form-group col-xs-8'}).append(
+          $('<label>', {
+            class: 'signin-field-icon fui-mail',
+            for: 'signin-email'
+          }).text('Email')
+        ).append(
+          $('<input>', {
+            class: 'form-control signin-field',
+            name: 'login',
+            type: 'text',
+            placeholder: 'Enter your email',
+            id: 'signin-email'
+          })
+        )
+      ).append(
+        $('<div>', {class: 'form-group col-xs-8'}).append(
+          $('<label>', {
+            class: 'signin-field-icon fui-lock',
+            for: 'signin-email'
+          }).text('Password')
+        ).append(
+          $('<input>', {
+            class: 'form-control signin-field',
+            name: 'password',
+            type: 'password',
+            placeholder: 'Password',
+            id: 'signin-pass'
+          })
+        )
+      ).append(
+        $('<button>', {
+          class: 'btn btn-primary btn-lg btn-block',
+          type: 'button'
+        }).text('Sign in')
+      )
+    );
   },
 
   setLoyaltyBadge: function(data) {

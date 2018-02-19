@@ -6,6 +6,21 @@ var langNav = navigator.language.substring(0,2);
 
 moment.locale(langNav);
 
+chrome.runtime.sendMessage({ msg: "checkLogin" });
+
+chrome.runtime.onMessage.addListener(
+  function(request, sender, sendResponse) {
+    if (request.msg == "loginToken") {
+      if (request.token !== undefined) {
+        curator.showReviewForm(request.token);
+      }
+    }
+    if (request.msg == "requireLogin") {
+      curator.showLoginForm(request.reason);
+    }
+  }
+);
+
 chrome.tabs.query(query, function(tabs) {
   currentTab = tabs[0];
   $('h1').text(chrome.i18n.getMessage('appName'));

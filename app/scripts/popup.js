@@ -8,6 +8,8 @@ moment.locale(langNav);
 
 chrome.runtime.sendMessage({ msg: "checkLogin" });
 
+
+
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
     if (request.msg == "loginToken") {
@@ -41,12 +43,36 @@ chrome.tabs.query(query, function(tabs) {
     initEvents();
     curator.setBadges(currentTab.url);
     $('.search.container form').attr('action', 'https://www.healthcurator.org/' + langNav + '/browser');
+    recoverPopup();
   });
 
 });
 
+function recoverPopup() {
+  // Popup must persist (re open without reset )
+  setTimeout(()=> {
+    chrome.storage.local.get(
+      ['review-title','review-rate', 'signin-email'],
+      function(items) {
+        console.log(items);
+        $('#review-title').val(items['review-title']);
+        $('#review-rate').val(items['review-rate']);
+        $('#signin-email').val(items['signin-email']);
+      }
+    );
+    setInterval(function(){
+      chrome.storage.local.set({
+        'review-title': $('#review-title').val(),
+        'review-rate': $('#review-rate').val(),
+        'signin-email': $('#signin-email').val()
+    });
+    },1000);
+  }, 200);
+}
+
 function initEvents() {
   console.log("set events");
+
   $('body').on('submit', '#loginForm', (e) => {
     e.preventDefault();
     console.log('submit');

@@ -23,66 +23,59 @@ chrome.browserAction.onClicked.addListener(function(tab) {
 
 });
 
-var loginState = function() {
-  // TODO Get stored Token
-  var token = undefined;
-  if (!token) {
-    return chrome.runtime.sendMessage({
-      msg: 'requireLogin',
-      reason: 'logout'
-    });
-  }
-
-  // TODO Try token validity
-  var isValid = true;
-
-  if (isValid) {
+function checkLogin () {
+  chrome.storage.local.get('token', function(token) {
+    if (!token) {
+      return chrome.runtime.sendMessage({
+        msg: 'requireLogin',
+        reason: 'logout'
+      });
+    }
     return chrome.runtime.sendMessage({
       msg: "loginToken",
       token: token,
     });
-  } else {
-    return chrome.runtime.sendMessage({
-      msg: 'requireLogin',
-      reason: 'expired'
-    });
-  }
-
+  });
 };
+
+function requestLogin () {
+  var xhr = new XMLHttpRequest();
+  xhr.open("POST", "http://localhost:8888/hon-curator-website/api/login", true);
+
+  xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState == 4) {
+      var user = JSON.parse(xhr.response);
+      if(user.token) {
+        chrome.storage.local.set({token: user.token}, function() {
+
+          return chrome.runtime.sendMessage({
+            msg: 'loginToken',
+            token: user.token
+          });
+        });
+      } else {
+        // Handle error
+        return chrome.runtime.sendMessage({
+          msg: 'requireLogin',
+          reason: 'fail'
+        });
+      }
+    }
+  }
+  xhr.send(request.form);
+}
+
 
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse){
     if(request.msg == "checkLogin") {
-      loginState();
+      checkLogin();
     }
     if(request.msg == "requestLogin") {
       console.log(request.form);
+      requestLogin();
 
-      var xhr = new XMLHttpRequest();
-      xhr.open("POST", "http://localhost:8888/hon-curator-website/api/login", true);
-
-      xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-      xhr.onreadystatechange = function() {
-        if (xhr.readyState == 4) {
-          var user = JSON.parse(xhr.response);
-          if(user.token) {
-            chrome.storage.local.set({token: user.token}, function() {
-
-              return chrome.runtime.sendMessage({
-                msg: 'loginToken',
-                token: user.token
-              });
-            });
-          } else {
-            // Handle error
-            return chrome.runtime.sendMessage({
-              msg: 'requireLogin',
-              reason: 'fail'
-            });
-          }
-        }
-      }
-      xhr.send(request.form);
     }
   }
 );

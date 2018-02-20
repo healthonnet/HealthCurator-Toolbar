@@ -138,20 +138,36 @@ var curator = {
 
   showReviewForm: (user) => {
     $('#mainPopup').html(
-      $('<div>', {id: 'reviewForm'}).append(
+      $('<form>', {
+        id: 'reviewForm',
+        class: 'col-xs-10 center-block'
+      }).append(
         $('<div>', {class: 'form-group'}).append(
-          $('<input>', {
-            class: 'form-control signin-field',
-            name: 'login',
-            type: 'text',
-            placeholder: 'Enter your email',
-            id: 'signin-email'
-          })
-        ).append(
           $('<label>', {
-            class: 'signin-field-icon fui-mail',
-            for: 'signin-email'
-          }).text('email')
+            for: 'review-title'
+          }).text('Title of the review')
+        ).append(
+          $('<input>', {
+            class: 'form-control review-field',
+            name: 'title',
+            type: 'text',
+            placeholder: 'Your review title',
+            id: 'review-title'
+          })
+        )
+      ).append(
+        $('<div>', {class: 'form-group'}).append(
+          $('<label>', {
+            for: 'review-rate'
+          }).text('Global appreciation')
+        ).append(
+          $('<input>', {
+            class: 'form-control review-field',
+            name: 'global_rate',
+            type: 'text',
+            placeholder: 'Your review title',
+            id: 'review-rate'
+          })
         )
       )
     );

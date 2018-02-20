@@ -55,5 +55,34 @@ chrome.runtime.onMessage.addListener(
     if(request.msg == "checkLogin") {
       loginState();
     }
+    if(request.msg == "requestLogin") {
+      console.log(request.form);
+
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", "http://localhost:8888/hon-curator-website/api/login", true);
+
+      xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState == 4) {
+          var user = JSON.parse(xhr.response);
+          if(user.token) {
+            chrome.storage.local.set({token: user.token}, function() {
+
+              return chrome.runtime.sendMessage({
+                msg: 'loginToken',
+                token: user.token
+              });
+            });
+          } else {
+            // Handle error
+            return chrome.runtime.sendMessage({
+              msg: 'requireLogin',
+              reason: 'fail'
+            });
+          }
+        }
+      }
+      xhr.send(request.form);
+    }
   }
 );

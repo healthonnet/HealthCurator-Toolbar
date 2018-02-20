@@ -161,7 +161,7 @@ var curator = {
     var imgURL = chrome.extension.getURL('/images/icon-128.png');
 
     $('#mainPopup').html(
-      $('<div>', {
+      $('<form>', {
         id: 'loginForm',
         class: 'col-xs-12'
       }).append(
@@ -178,7 +178,7 @@ var curator = {
         ).append(
           $('<input>', {
             class: 'form-control signin-field',
-            name: 'login',
+            name: 'email',
             type: 'text',
             placeholder: 'Enter your email',
             id: 'signin-email'
@@ -202,7 +202,7 @@ var curator = {
       ).append(
         $('<button>', {
           class: 'btn btn-primary btn-lg btn-block',
-          type: 'button'
+          type: 'submit',
         }).text('Sign in')
       )
     );

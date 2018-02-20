@@ -38,8 +38,32 @@ chrome.tabs.query(query, function(tabs) {
     )
   );
   $(document).ready(() => {
+    initEvents();
     curator.setBadges(currentTab.url);
     $('.search.container form').attr('action', 'https://www.healthcurator.org/' + langNav + '/browser');
   });
 
 });
+
+function initEvents() {
+  console.log("set events");
+  $('body').on('submit', '#loginForm', (e) => {
+    e.preventDefault();
+    console.log('submit');
+
+    chrome.runtime.sendMessage({
+      msg: "requestLogin",
+      form: $('#loginForm').serialize()
+    });
+  });
+}
+
+
+function onRequestLogin(email, password) {
+  console.log(email, password);
+  chrome.runtime.sendMessage({
+    msg: "requestLogin",
+    email: email,
+    password: password
+  });
+}

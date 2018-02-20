@@ -161,13 +161,65 @@ var curator = {
             for: 'review-rate'
           }).text('Global appreciation')
         ).append(
-          $('<input>', {
-            class: 'form-control review-field',
-            name: 'global_rate',
-            type: 'text',
-            placeholder: 'Your review title',
-            id: 'review-rate'
-          })
+          $('<span>', {
+            class: 'row review-field star-cb-group',
+          }).append(
+            $('<input>', {
+              type: 'radio',
+              id: 'review-rate-5',
+              name: 'global-rate',
+              value: 5
+            })
+          ).append(
+            $('<label>', {
+              for: 'review-rate-5'
+            }).text('5')
+          ).append(
+            $('<input>', {
+              type: 'radio',
+              id: 'review-rate-4',
+              name: 'global-rate',
+              value: 4
+            })
+          ).append(
+            $('<label>', {
+              for: 'review-rate-4'
+            }).text('4')
+          ).append(
+            $('<input>', {
+              type: 'radio',
+              id: 'review-rate-3',
+              name: 'global-rate',
+              value: 3
+            })
+          ).append(
+            $('<label>', {
+              for: 'review-rate-3'
+            }).text('3')
+          ).append(
+            $('<input>', {
+              type: 'radio',
+              id: 'review-rate-2',
+              name: 'global-rate',
+              value: 2
+            })
+          ).append(
+            $('<label>', {
+              for: 'review-rate-2'
+            }).text('2')
+          ).append(
+            $('<input>', {
+              type: 'radio',
+              id: 'review-rate-1',
+              name: 'global-rate',
+              value: 1
+            })
+          ).append(
+            $('<label>', {
+              for: 'review-rate-1'
+            }).text('1')
+          )
+
         )
       )
     );

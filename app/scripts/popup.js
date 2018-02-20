@@ -56,14 +56,14 @@ function recoverPopup() {
       function(items) {
         console.log(items);
         $('#review-title').val(items['review-title']);
-        $('#review-rate').val(items['review-rate']);
+        $('#review-rate-'+ items['review-rate']).attr('checked', true);
         $('#signin-email').val(items['signin-email']);
       }
     );
     setInterval(function(){
       chrome.storage.local.set({
         'review-title': $('#review-title').val(),
-        'review-rate': $('#review-rate').val(),
+        'review-rate': $('input[name=global-rate]:checked').val(),
         'signin-email': $('#signin-email').val()
     });
     },1000);

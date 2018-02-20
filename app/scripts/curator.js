@@ -156,7 +156,7 @@ var curator = {
           })
         )
       ).append(
-        $('<div>', {class: 'form-group'}).append(
+        $('<div>', {class: 'form-group rate-group'}).append(
           $('<label>', {
             for: 'review-rate'
           }).text('Global appreciation')
@@ -219,8 +219,26 @@ var curator = {
               for: 'review-rate-1'
             }).text('1')
           )
-
         )
+      ).append(
+        $('<div>', {class: 'form-group'}).append(
+          $('<label>', {
+            for: 'review-comment'
+          }).text('Review')
+        ).append(
+          $('<textarea>', {
+            class: 'form-control',
+            rows: 4,
+            cols:50,
+            id: 'review-comment',
+            name: 'global-comment',
+          })
+        )
+      ).append(
+        $('<button>', {
+          class: 'btn btn-primary btn-lg btn-block',
+          type: 'submit',
+        }).text('Send my review')
       )
     );
   },

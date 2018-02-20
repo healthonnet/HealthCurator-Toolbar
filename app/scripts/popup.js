@@ -52,20 +52,23 @@ function recoverPopup() {
   // Popup must persist (re open without reset )
   setTimeout(()=> {
     chrome.storage.local.get(
-      ['review-title','review-rate', 'signin-email'],
+      ['review-title','review-rate', 'review-comment', 'signin-email'],
       function(items) {
         console.log(items);
         $('#review-title').val(items['review-title']);
         $('#review-rate-'+ items['review-rate']).attr('checked', true);
+        $('#review-comment').val(items['review-comment']);
         $('#signin-email').val(items['signin-email']);
       }
     );
     setInterval(function(){
+      console.log('save');
       chrome.storage.local.set({
         'review-title': $('#review-title').val(),
+        'review-comment': $('#review-comment').val(),
         'review-rate': $('input[name=global-rate]:checked').val(),
         'signin-email': $('#signin-email').val()
-    });
+      });
     },1000);
   }, 200);
 }

@@ -167,6 +167,7 @@ var curator = {
             class: 'form-control review-field',
             name: 'title',
             type: 'text',
+            required: '',
             placeholder: 'Your review title',
             id: 'review-title'
           })
@@ -183,7 +184,7 @@ var curator = {
             $('<input>', {
               type: 'radio',
               id: 'review-rate-5',
-              name: 'global-rate',
+              name: 'global_rate',
               value: 5
             })
           ).append(
@@ -194,7 +195,7 @@ var curator = {
             $('<input>', {
               type: 'radio',
               id: 'review-rate-4',
-              name: 'global-rate',
+              name: 'global_rate',
               value: 4
             })
           ).append(
@@ -205,7 +206,7 @@ var curator = {
             $('<input>', {
               type: 'radio',
               id: 'review-rate-3',
-              name: 'global-rate',
+              name: 'global_rate',
               value: 3
             })
           ).append(
@@ -216,7 +217,7 @@ var curator = {
             $('<input>', {
               type: 'radio',
               id: 'review-rate-2',
-              name: 'global-rate',
+              name: 'global_rate',
               value: 2
             })
           ).append(
@@ -227,7 +228,7 @@ var curator = {
             $('<input>', {
               type: 'radio',
               id: 'review-rate-1',
-              name: 'global-rate',
+              name: 'global_rate',
               value: 1
             })
           ).append(
@@ -245,9 +246,10 @@ var curator = {
           $('<textarea>', {
             class: 'form-control',
             rows: 4,
+            required: '',
             cols:50,
             id: 'review-comment',
-            name: 'global-comment',
+            name: 'global_comment',
           })
         )
       ).append(

@@ -75,6 +75,74 @@ function requestLogin (form) {
   xhr.send(form);
 }
 
+function refreshToken (oldtoken, callback) {
+  var xhr = new XMLHttpRequest();
+  xhr.open("POST", "http://localhost:8888/hon-curator-website/api/refresh", true);
+
+  xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+  xhr.onload = function () {
+    var response = JSON.parse(xhr.response);
+
+    if (response.error) {
+      return chrome.runtime.sendMessage({
+        msg: 'requireLogin',
+        reason: 'token expired'
+      });
+    }
+
+    chrome.storage.local.set({
+      token: response.token
+    }, function() {
+      callback(response.token);
+    });
+  };
+  xhr.onerror = function () {
+    callback(xhr.response);
+  };
+  xhr.send('token='+ oldtoken);
+}
+
+// And we'd call it as such:
+
+
+function postReview(form, url, token) {
+
+  var pathArray = url.split( '/' );
+  url = pathArray[0] + '//' + pathArray[2];
+
+  var xhr = new XMLHttpRequest();
+  xhr.open("POST", "http://localhost:8888/hon-curator-website/api/v1/review/create", true);
+
+  xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+  xhr.setRequestHeader("Authorization", "Bearer " + token);
+
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState == 4) {
+      console.log(xhr);
+      var response = JSON.parse(xhr.response);
+      console.log(response);
+
+      if (response.error) {
+        refreshToken(token, function(newToken) {
+          console.log('retry');
+          postReview(form, url, newToken);
+        })
+      }
+
+      //TODO if fails return to login
+    }
+  }
+
+  xhr.send(form + '&host='+ url);
+}
+
+function requestReview(form, url) {
+  chrome.storage.local.get('token', function(item) {
+    console.log(form, url);
+    postReview(form, url, item.token)
+  });
+}
 
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse){
@@ -83,7 +151,9 @@ chrome.runtime.onMessage.addListener(
     }
     if(request.msg == "requestLogin") {
       requestLogin(request.form);
-
+    }
+    if(request.msg == "requestReview") {
+      requestReview(request.form, request.url);
     }
   }
 );

@@ -93,7 +93,8 @@ function initEvents() {
 
     chrome.runtime.sendMessage({
       msg: "requestReview",
-      form: $('#reviewForm').serialize()
+      form: $('#reviewForm').serialize(),
+      url: currentTab.url
     });
   });
 }

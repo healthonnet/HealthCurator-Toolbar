@@ -24,8 +24,8 @@ chrome.browserAction.onClicked.addListener(function(tab) {
 });
 
 function checkLogin () {
-  chrome.storage.local.get('token', function(token) {
-    if (!token) {
+  chrome.storage.local.get(['token', 'username', 'userid'], function(items) {
+    if (!items.token || !items.username || !items.userid) {
       return chrome.runtime.sendMessage({
         msg: 'requireLogin',
         reason: 'logout'
@@ -33,12 +33,14 @@ function checkLogin () {
     }
     return chrome.runtime.sendMessage({
       msg: "loginToken",
-      token: token,
+      token: items.token,
+      username: items.username,
+      userid: items.userid
     });
   });
 };
 
-function requestLogin () {
+function requestLogin (form) {
   var xhr = new XMLHttpRequest();
   xhr.open("POST", "http://localhost:8888/hon-curator-website/api/login", true);
 
@@ -47,11 +49,18 @@ function requestLogin () {
     if (xhr.readyState == 4) {
       var user = JSON.parse(xhr.response);
       if(user.token) {
-        chrome.storage.local.set({token: user.token}, function() {
+        console.log(user);
+        chrome.storage.local.set({
+          token: user.token,
+          username: user.user.name,
+          userid: user.user.id,
+        }, function() {
 
           return chrome.runtime.sendMessage({
             msg: 'loginToken',
-            token: user.token
+            token: user.token,
+            username: user.user.name,
+            userid: user.user.id,
           });
         });
       } else {
@@ -63,7 +72,7 @@ function requestLogin () {
       }
     }
   }
-  xhr.send(request.form);
+  xhr.send(form);
 }
 
 
@@ -73,8 +82,7 @@ chrome.runtime.onMessage.addListener(
       checkLogin();
     }
     if(request.msg == "requestLogin") {
-      console.log(request.form);
-      requestLogin();
+      requestLogin(request.form);
 
     }
   }

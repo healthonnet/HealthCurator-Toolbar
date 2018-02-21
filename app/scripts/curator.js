@@ -1,7 +1,7 @@
 'use strict';
 var FEWCOOKIES = 10;
 var MORECOOKIES = 20;
-var HEALTHCURATOR_API = "http://localhost:8888/hon-curator-website";
+var HEALTHCURATOR_ROOT = "http://localhost:8888/hon-curator-website";
 var curator = {
 
   getDomainFromUrl: function(link) {
@@ -16,7 +16,7 @@ var curator = {
 
   getServiceById: (id) => {
     return $.ajax({
-      url: HEALTHCURATOR_API + '/api/v1/service/' + id
+      url: HEALTHCURATOR_ROOT + '/api/v1/service/' + id
     });
   },
 
@@ -62,7 +62,7 @@ var curator = {
         $('#certification .unknown').css('display', 'none');
 
         const infos = response.data;
-        $('#curator-link').attr('href', HEALTHCURATOR_API + '/browser/' + infos.id);
+        $('#curator-link').attr('href', HEALTHCURATOR_ROOT + '/browser/' + infos.id);
         if (infos.ratings !== undefined && infos.ratings !== '0') {
           $('#certification-domain span').text(infos.ratings);
           $('#certification-header').text(infos.name);
@@ -136,7 +136,23 @@ var curator = {
     */
   },
 
-  showReviewForm: (user) => {
+  showLoginHeader:(username, userid) => {
+    $('#view-certificate').html(
+      $('<span>').text('You\'re logged as ').append(
+        $('<a>', {
+          target: '_blank',
+          href: HEALTHCURATOR_ROOT + '/account/' + userid
+        }).text(username)
+      ).append(' | ').append(
+        $('<a>', {
+          id:'user-logout',
+          href: '#',
+        }).text('logout')
+      )
+    )
+  },
+
+  showReviewForm: () => {
     $('#mainPopup').html(
       $('<form>', {
         id: 'reviewForm',

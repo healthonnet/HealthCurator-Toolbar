@@ -13,8 +13,11 @@ chrome.runtime.sendMessage({ msg: "checkLogin" });
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
     if (request.msg == "loginToken") {
-      if (request.token !== undefined) {
-        curator.showReviewForm(request.token);
+      if (request.token !== undefined
+        && request.userid !== undefined
+        && request.username !== undefined) {
+        curator.showReviewForm();
+        curator.showLoginHeader(request.username, request.userid);
       }
     }
     if (request.msg == "requireLogin") {
@@ -25,7 +28,6 @@ chrome.runtime.onMessage.addListener(
 
 chrome.tabs.query(query, function(tabs) {
   currentTab = tabs[0];
-  $('h1').text(chrome.i18n.getMessage('appName'));
   $('#khresmoi').text(chrome.i18n.getMessage('khresmoiTitle'));
   $('#q').attr('placeholder',
     chrome.i18n.getMessage('khresmoiPlaceholder'));
@@ -78,21 +80,20 @@ function initEvents() {
 
   $('body').on('submit', '#loginForm', (e) => {
     e.preventDefault();
-    console.log('submit');
 
     chrome.runtime.sendMessage({
       msg: "requestLogin",
       form: $('#loginForm').serialize()
     });
   });
-}
 
+  $('body').on('submit', '#reviewForm', (e) => {
+    e.preventDefault();
+    console.log('submit');
 
-function onRequestLogin(email, password) {
-  console.log(email, password);
-  chrome.runtime.sendMessage({
-    msg: "requestLogin",
-    email: email,
-    password: password
+    chrome.runtime.sendMessage({
+      msg: "requestReview",
+      form: $('#reviewForm').serialize()
+    });
   });
 }

@@ -14,8 +14,13 @@ var curator = {
     return subdomain !== '' ? subdomain + '.' + domain : domain;
   },
 
-  getServiceById: (id) => {
+  getServiceById: (id, token) => {
     return $.ajax({
+      beforeSend: function(request) {
+        if (token) {
+          request.setRequestHeader("Authorization", "Bearer " + token);
+        }
+      },
       url: HEALTHCURATOR_ROOT + '/api/v1/service/' + id
     });
   },
@@ -24,14 +29,11 @@ var curator = {
     console.log(domain);
   },
 
-  setBadges: function(link) {
-    const prettyLink = curator.getDomainFromUrl(link);
-    console.log(link,prettyLink);
-    if (prettyLink !== 'null.null') {
+  setBadges: function(prettyLink, token) {
       $('#certification-header').text(prettyLink);
 
       // Get website infos on curator
-      curator.getServiceById(2).then((response) => {
+      curator.getServiceById(2, token).then((response) => {
 
         $('#certification').removeClass('certification-grey');
         $('#certification').addClass('certification-orange');
@@ -46,32 +48,19 @@ var curator = {
           const starPercentage = (infos.ratings / 5) * 100;
           document.querySelector('#certification-domain .stars-inner')
             .style.width = `${(Math.round(starPercentage / 10) * 10)}%`;
-
-
-          $('#loyalty-badge').append(
-            $('<div>', {class: 'v-wrapper'}).append(
-              $('<div>', {
-                class: 'img-seal',
-                'data-toggle': 'tooltip',
-                'data-placement': 'bottom',
-                title: tooltipLoyalty,
-              }).append(
-                $('<div>', {class: 'wrapper-hon-year'}).append(years)
-              )
-            )
-          ).append(
-            $('<p>', {class: 'sub-wrapper'}).text(
-              chrome.i18n.getMessage('loyalty')
-            )
-          );
         } else {
           $('#certification-domain span').text('No Rates');
         }
+
+        chrome.runtime.sendMessage({
+          msg: 'checkLogin',
+          user_review: infos.user_review
+        });
       });
 
       /*curator.getServiceByDomain(prettyLink).then((response) => {
-        console.log(response);
-      });*/
+       console.log(response);
+       });*/
 
       if (true) {
 
@@ -79,7 +68,6 @@ var curator = {
         $('#certification .known').css('display', 'none');
         $('#certification .unknown').css('display', 'block');
       }
-    }
   },
 
   showLoginHeader:(username, userid) => {
@@ -205,6 +193,126 @@ var curator = {
         }).text('Send my review')
       )
     );
+  },
+
+  showEditReviewForm: (review) => {
+    console.log(review);
+    $('#mainPopup').html(
+      $('<form>', {
+        id: 'editReviewForm',
+        class: 'col-xs-10 center-block'
+      }).append(
+        $('<div>', {class: 'form-group'}).append(
+          $('<label>', {
+            for: 'edit-title'
+          }).text('Title of the review')
+        ).append(
+          $('<input>', {
+            class: 'form-control review-field col-xs-11',
+            name: 'title',
+            type: 'text',
+            required: '',
+            value: review.title,
+            placeholder: 'Your review title',
+            id: 'edit-title'
+          })
+        )
+      ).append(
+        $('<div>', {class: 'form-group rate-group'}).append(
+          $('<label>', {
+            for: 'edit-rate'
+          }).text('Global appreciation')
+        ).append(
+          $('<span>', {
+            class: 'row review-field star-cb-group',
+          }).append(
+            $('<input>', {
+              type: 'radio',
+              id: 'edit-rate-5',
+              name: 'global_rate',
+              value: 5
+            })
+          ).append(
+            $('<label>', {
+              for: 'edit-rate-5'
+            }).text('5')
+          ).append(
+            $('<input>', {
+              type: 'radio',
+              id: 'edit-rate-4',
+              name: 'global_rate',
+              value: 4
+            })
+          ).append(
+            $('<label>', {
+              for: 'edit-rate-4'
+            }).text('4')
+          ).append(
+            $('<input>', {
+              type: 'radio',
+              id: 'edit-rate-3',
+              name: 'global_rate',
+              value: 3
+            })
+          ).append(
+            $('<label>', {
+              for: 'edit-rate-3'
+            }).text('3')
+          ).append(
+            $('<input>', {
+              type: 'radio',
+              id: 'edit-rate-2',
+              name: 'global_rate',
+              value: 2
+            })
+          ).append(
+            $('<label>', {
+              for: 'edit-rate-2'
+            }).text('2')
+          ).append(
+            $('<input>', {
+              type: 'radio',
+              id: 'edit-rate-1',
+              name: 'global_rate',
+              value: 1
+            })
+          ).append(
+            $('<label>', {
+              for: 'edit-rate-1'
+            }).text('1')
+          )
+        )
+      ).append(
+        $('<div>', {class: 'form-group'}).append(
+          $('<label>', {
+            for: 'edit-comment'
+          }).text('Review')
+        ).append(
+          $('<textarea>', {
+            class: 'form-control',
+            rows: 4,
+            required: '',
+            cols:50,
+            id: 'edit-comment',
+            name: 'global_comment',
+          })
+        ).append(
+          $('<input>', {
+            type: 'hidden',
+            name: 'review_id',
+            id: 'edit_id',
+            value: review.id
+          })
+        )
+      ).append(
+        $('<button>', {
+          class: 'btn btn-primary btn-lg btn-block',
+          type: 'submit',
+        }).text('Edit my review')
+      )
+    );
+    $('#edit-rate-'+ review.global_rate).attr('checked', true);
+    $('#edit-comment').val(review.global_comment);
   },
 
   showLoginForm: (reason) => {

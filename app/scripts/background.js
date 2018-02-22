@@ -23,7 +23,7 @@ chrome.browserAction.onClicked.addListener(function(tab) {
 
 });
 
-function checkLogin () {
+function checkLogin (user_review) {
   chrome.storage.local.get(['token', 'username', 'userid'], function(items) {
     if (!items.token || !items.username || !items.userid) {
       return chrome.runtime.sendMessage({
@@ -35,10 +35,11 @@ function checkLogin () {
       msg: "loginToken",
       token: items.token,
       username: items.username,
-      userid: items.userid
+      userid: items.userid,
+      user_review: user_review
     });
   });
-};
+}
 
 function requestLogin (form) {
   var xhr = new XMLHttpRequest();
@@ -106,22 +107,25 @@ function refreshToken (oldtoken, callback) {
 // And we'd call it as such:
 
 
-function postReview(form, url, token) {
+function postReview(form, url, token, review_id) {
 
   var pathArray = url.split( '/' );
   url = pathArray[0] + '//' + pathArray[2];
 
   var xhr = new XMLHttpRequest();
-  xhr.open("POST", "http://localhost:8888/hon-curator-website/api/v1/review/create", true);
+  console.log(form);
+  if (review_id) {
+    xhr.open("POST", "http://localhost:8888/hon-curator-website/api/v1/review/update/" + review_id, true);
+  } else {
+    xhr.open("POST", "http://localhost:8888/hon-curator-website/api/v1/review/create", true);
+  }
 
   xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
   xhr.setRequestHeader("Authorization", "Bearer " + token);
 
   xhr.onreadystatechange = function() {
     if (xhr.readyState == 4) {
-      console.log(xhr);
       var response = JSON.parse(xhr.response);
-      console.log(response);
 
       if (response.error) {
         refreshToken(token, function(newToken) {
@@ -129,31 +133,28 @@ function postReview(form, url, token) {
           postReview(form, url, newToken);
         })
       }
-
-      //TODO if fails return to login
     }
   }
 
   xhr.send(form + '&host='+ url);
 }
 
-function requestReview(form, url) {
+function requestReview(form, url, review_id) {
   chrome.storage.local.get('token', function(item) {
-    console.log(form, url);
-    postReview(form, url, item.token)
+    postReview(form, url, item.token, review_id)
   });
 }
 
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse){
     if(request.msg == "checkLogin") {
-      checkLogin();
+      checkLogin(request.user_review);
     }
     if(request.msg == "requestLogin") {
       requestLogin(request.form);
     }
     if(request.msg == "requestReview") {
-      requestReview(request.form, request.url);
+      requestReview(request.form, request.url, request.review_id);
     }
   }
 );

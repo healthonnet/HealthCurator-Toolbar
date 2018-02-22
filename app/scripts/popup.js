@@ -6,17 +6,17 @@ var langNav = navigator.language.substring(0,2);
 
 moment.locale(langNav);
 
-chrome.runtime.sendMessage({ msg: "checkLogin" });
-
-
-
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
     if (request.msg == "loginToken") {
       if (request.token !== undefined
         && request.userid !== undefined
         && request.username !== undefined) {
-        curator.showReviewForm();
+        if (request.user_review) {
+          curator.showEditReviewForm(request.user_review);
+        } else {
+          curator.showReviewForm();
+        }
         curator.showLoginHeader(request.username, request.userid);
       }
     }
@@ -43,7 +43,14 @@ chrome.tabs.query(query, function(tabs) {
   );
   $(document).ready(() => {
     initEvents();
-    curator.setBadges(currentTab.url);
+
+    const prettyLink = curator.getDomainFromUrl(currentTab.url);
+    if (prettyLink !== 'null.null') {
+      chrome.storage.local.get('token', function(item) {
+        curator.setBadges(prettyLink, item.token);
+      });
+    }
+
     $('.search.container form').attr('action', 'https://www.healthcurator.org/' + langNav + '/browser');
     recoverPopup();
   });
@@ -76,8 +83,6 @@ function recoverPopup() {
 }
 
 function initEvents() {
-  console.log("set events");
-
   $('body').on('submit', '#loginForm', (e) => {
     e.preventDefault();
 
@@ -89,11 +94,21 @@ function initEvents() {
 
   $('body').on('submit', '#reviewForm', (e) => {
     e.preventDefault();
-    console.log('submit');
 
     chrome.runtime.sendMessage({
       msg: "requestReview",
       form: $('#reviewForm').serialize(),
+      url: currentTab.url
+    });
+  });
+
+  $('body').on('submit', '#editReviewForm', (e) => {
+    e.preventDefault();
+
+    chrome.runtime.sendMessage({
+      msg: "requestReview",
+      form: $('#editReviewForm').serialize(),
+      review_id: $('#editReviewForm #edit_id').val(),
       url: currentTab.url
     });
   });

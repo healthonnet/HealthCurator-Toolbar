@@ -133,6 +133,12 @@ function postReview(form, url, token, review_id) {
           postReview(form, url, newToken);
         })
       }
+
+      // Success
+      return chrome.runtime.sendMessage({
+        msg: "reviewSuccess",
+        user_review: response.data,
+      });
     }
   }
 

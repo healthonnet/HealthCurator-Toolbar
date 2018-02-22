@@ -16,12 +16,17 @@ chrome.runtime.onMessage.addListener(
           curator.showEditReviewForm(request.user_review);
         } else {
           curator.showReviewForm();
+          recoverPopup();
         }
         curator.showLoginHeader(request.username, request.userid);
       }
     }
     if (request.msg == "requireLogin") {
       curator.showLoginForm(request.reason);
+    }
+    if (request.msg == "reviewSuccess") {
+      // Toast ?
+      curator.showEditReviewForm(request.user_review)
     }
   }
 );
@@ -52,7 +57,6 @@ chrome.tabs.query(query, function(tabs) {
     }
 
     $('.search.container form').attr('action', 'https://www.healthcurator.org/' + langNav + '/browser');
-    recoverPopup();
   });
 
 });
@@ -63,7 +67,6 @@ function recoverPopup() {
     chrome.storage.local.get(
       ['review-title','review-rate', 'review-comment', 'signin-email'],
       function(items) {
-        console.log(items);
         $('#review-title').val(items['review-title']);
         $('#review-rate-'+ items['review-rate']).attr('checked', true);
         $('#review-comment').val(items['review-comment']);

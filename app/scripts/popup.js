@@ -25,6 +25,9 @@ chrome.runtime.onMessage.addListener(
       curator.clearLoginHeader();
       curator.showLoginForm(request.reason);
     }
+    if (request.msg == "successLogin") {
+      window.location = ''; // Refresh
+    }
     if (request.msg == "reviewSuccess") {
       // Toast ?
       curator.showEditReviewForm(request.user_review)

@@ -58,10 +58,7 @@ function requestLogin (form) {
         }, function() {
 
           return chrome.runtime.sendMessage({
-            msg: 'loginToken',
-            token: user.token,
-            username: user.user.name,
-            userid: user.user.id,
+            msg: 'successLogin',
           });
         });
       } else {

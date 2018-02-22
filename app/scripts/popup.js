@@ -22,6 +22,7 @@ chrome.runtime.onMessage.addListener(
       }
     }
     if (request.msg == "requireLogin") {
+      curator.clearLoginHeader();
       curator.showLoginForm(request.reason);
     }
     if (request.msg == "reviewSuccess") {
@@ -115,4 +116,14 @@ function initEvents() {
       url: currentTab.url
     });
   });
+
+
+  $('body').on('click', '#user-logout', (e) => {
+    e.preventDefault();
+
+    chrome.runtime.sendMessage({
+      msg: "requestLogout",
+    });
+  });
+
 }

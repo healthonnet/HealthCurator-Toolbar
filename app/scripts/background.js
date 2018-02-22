@@ -76,6 +76,15 @@ function requestLogin (form) {
   xhr.send(form);
 }
 
+function requestLogout() {
+  chrome.storage.local.remove(['token', 'username', 'userid'], function() {
+    return chrome.runtime.sendMessage({
+      msg: 'requireLogin',
+      reason: 'logout'
+    });
+  });
+}
+
 function refreshToken (oldtoken, callback) {
   var xhr = new XMLHttpRequest();
   xhr.open("POST", "http://localhost:8888/hon-curator-website/api/refresh", true);
@@ -161,6 +170,9 @@ chrome.runtime.onMessage.addListener(
     }
     if(request.msg == "requestReview") {
       requestReview(request.form, request.url, request.review_id);
+    }
+    if(request.msg == "requestLogout") {
+      requestLogout();
     }
   }
 );

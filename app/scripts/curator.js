@@ -70,6 +70,10 @@ var curator = {
       }
   },
 
+  clearLoginHeader:() => {
+    $('#view-certificate').text('You\'re not logged in');
+  },
+
   showLoginHeader:(username, userid) => {
     $('#view-certificate').html(
       $('<span>').text('You\'re logged as ').append(

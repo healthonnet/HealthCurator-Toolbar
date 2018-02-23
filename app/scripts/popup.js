@@ -56,9 +56,9 @@ chrome.tabs.query(query, function(tabs) {
     if (prettyLink !== 'null.null') {
       chrome.storage.local.get('token', function(item) {
         curator.setBadges(prettyLink, item.token);
+        recoverPopup();
       });
     }
-    recoverPopup();
   });
 
 });

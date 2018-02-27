@@ -353,6 +353,12 @@ var curator = {
           class: 'btn btn-primary btn-lg btn-block',
           type: 'submit',
         }).text('Sign in')
+      ).append(
+        $('<a>', {
+          class: 'register',
+          href: 'https://www.healthcurator.org/register',
+          target: '_blank',
+        }).text('Or create an Account')
       )
     );
   },

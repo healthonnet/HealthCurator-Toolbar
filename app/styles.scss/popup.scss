@@ -70,6 +70,13 @@ a:hover {
 #loginForm {
   padding-top: 35px;
   padding-bottom: 50px;
+  .register {
+    text-align: center;
+    display: block;
+    margin-top: 10px;
+    font-size: 1.3em;
+    color: #d35400;
+  }
 }
 
 #reviewForm, #editReviewForm, #loginForm {

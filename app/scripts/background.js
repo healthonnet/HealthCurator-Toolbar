@@ -19,10 +19,6 @@ if (chrome.omnibox) {
   });
 }
 
-chrome.browserAction.onClicked.addListener(function(tab) {
-
-});
-
 function checkLogin(user_review) {
   chrome.storage.local.get(['token', 'username', 'userid'], function(items) {
     if (!items.token || !items.username || !items.userid) {
@@ -110,9 +106,6 @@ function refreshToken(oldtoken, callback) {
   };
   xhr.send('token=' + oldtoken);
 }
-
-// And we'd call it as such:
-
 
 function postReview(form, url, token, review_id) {
 

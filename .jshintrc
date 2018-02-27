@@ -21,7 +21,7 @@
     "jQuery": true,
     "moment": true,
     "chrome": true,
-    "honcode": true,
+    "curator": true,
     "crypto": true,
     "casper": true,
     "tldjs": true,

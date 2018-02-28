@@ -96,6 +96,15 @@ a:hover {
 
   color: white;
   min-height: 114px;
+
+  #curator-domain {
+    display: none;
+  }
+
+  .known, .unknown {
+    display: none;
+  }
+
   .col-xs-6 {
     display: table-cell;
     vertical-align: top;
@@ -119,7 +128,9 @@ a:hover {
 
 .rating {
   font-size: 25pt;
-
+  span {
+    font-size: 15pt;
+  }
   .stars-outer {
     display: inline-block;
     position: relative;
@@ -145,11 +156,11 @@ a:hover {
   }
 }
 
-.certification-grey {
+.curator-grey {
   background-color: silver;
 }
 
-.certification-orange {
+.curator-orange {
   background-color: #d35400;
 }
 

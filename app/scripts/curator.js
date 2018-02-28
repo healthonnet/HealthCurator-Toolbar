@@ -30,28 +30,35 @@ const curator = {
     // Get website infos on curator
     curator.getServiceByDomain(prettyLink, token).then((response) => {
 
-      $('#curator').removeClass('certification-grey');
-      $('#curator').addClass('certification-orange');
+      $('#curator').removeClass('curator-grey');
+      $('#curator').addClass('curator-orange');
+      $('#curator-domain').css('display', 'block');
       $('#curator .known').css('display', 'block');
-      $('#curator .unknown').css('display', 'none');
 
       const infos = response.data;
       $('#curator-link').attr('href', HEALTHCURATOR_ROOT +
         '/browser/' + infos.id);
-      if (infos.ratings !== undefined && infos.ratings !== '0') {
-        $('#curator-domain span').text(infos.ratings);
-        $('#curator-header').text(infos.name);
-        const starPercentage = (infos.ratings / 5) * 100;
-        document.querySelector('#curator-domain .stars-inner')
-          .style.width = `${(Math.round(starPercentage / 10) * 10)}%`;
-      } else {
-        $('#curator-domain span').text('No Rates');
-      }
+
+      $('#curator-domain span').text(infos.ratings);
+      $('#curator-header').text(infos.name);
+      const starPercentage = (infos.ratings / 5) * 100;
+      document.querySelector('#curator-domain .stars-inner')
+        .style.width = `${(Math.round(starPercentage / 10) * 10)}%`;
+
+      /* TODO add review count.
+
+      $('#curator-domain .rating').append(
+        $('<span>').text('(1)')
+      );
+
+       */
 
       chrome.runtime.sendMessage({
         msg: 'checkLogin',
         user_review: infos.user_review,
       });
+    }).catch((e) => {
+      $('#curator .unknown').css('display', 'block');
     });
   },
 

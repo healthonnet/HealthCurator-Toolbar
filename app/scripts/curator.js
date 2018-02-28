@@ -1,8 +1,6 @@
 'use strict';
-var FEWCOOKIES = 10;
-var MORECOOKIES = 20;
-var HEALTHCURATOR_ROOT = 'http://localhost:8888/hon-curator-website';
-var curator = {
+var HEALTHCURATOR_ROOT = 'http://dev.healthcurator.org';
+const curator = {
 
   getDomainFromUrl: function(link) {
     var domain = tldjs.getDomain(link);

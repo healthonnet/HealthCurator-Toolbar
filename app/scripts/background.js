@@ -3,14 +3,15 @@
 function init() {
   // TODO Remove if not
 }
+
 init();
+var HEALTHCURATOR_ROOT = 'http://dev.healthcurator.org';
 
 if (chrome.omnibox) {
   chrome.omnibox.onInputEntered.addListener(function(text) {
-    var url = 'https://www.hon.ch/HONcode/Search/search.html';
+    var url = HEALTHCURATOR_ROOT;
     if (text) {
-      url += '?siteurl=&cref=http%3A%2F%2Fwww.hon.ch' +
-      '%2FCSE%2FHONCODE%2Fcontextlink.xml&sa=Search&hl=en&cof=FORID%3A11&q=' +
+      url += '/browser?search=' +
       encodeURIComponent(text);
     }
     chrome.tabs.query({active: true}, function(tab) {
@@ -39,7 +40,7 @@ function checkLogin(user_review) {
 
 function requestLogin(form) {
   var xhr = new XMLHttpRequest();
-  xhr.open('POST', 'http://localhost:8888/hon-curator-website/api/login', true);
+  xhr.open('POST', HEALTHCURATOR_ROOT + '/api/login', true);
 
   xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
   xhr.onreadystatechange = function() {
@@ -80,8 +81,7 @@ function requestLogout() {
 
 function refreshToken(oldtoken, callback) {
   var xhr = new XMLHttpRequest();
-  xhr.open('POST',
-    'http://localhost:8888/hon-curator-website/api/refresh', true);
+  xhr.open('POST', HEALTHCURATOR_ROOT + '/api/refresh', true);
 
   xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 
@@ -114,12 +114,10 @@ function postReview(form, url, token, review_id) {
 
   var xhr = new XMLHttpRequest();
   if (review_id) {
-    xhr.open('POST',
-      'http://localhost:8888/hon-curator-website/api/v1/review/update/' +
+    xhr.open('POST', HEALTHCURATOR_ROOT + '/api/v1/review/update/' +
       review_id, true);
   } else {
-    xhr.open('POST',
-      'http://localhost:8888/hon-curator-website/api/v1/review/create', true);
+    xhr.open('POST', HEALTHCURATOR_ROOT + '/api/v1/review/create', true);
     form += '&host=' + url;
   }
 

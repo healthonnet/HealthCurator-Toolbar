@@ -1,5 +1,5 @@
 {
-  "name": "hon-honcode-extension",
+  "name": "HealthCurator-Toolbar",
   "private": true,
   "version": "3.1.1",
   "dependencies": {
@@ -10,7 +10,7 @@
     "font-awesome": "^4.7.0",
     "country-code": "umpirsky/country-list#2.0.2"
   },
-  "homepage": "https://github.com/healthonnet/hon-honcode-extension",
+  "homepage": "https://github.com/healthonnet/HealthCurator-Toolbar",
   "license": "Apache",
   "ignore": [
     "**/.*",

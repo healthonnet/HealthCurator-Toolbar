@@ -92,16 +92,16 @@ a:hover {
 
 }
 
+.known, .unknown {
+  display: none;
+}
+
 #curator {
 
   color: white;
   min-height: 114px;
 
   #curator-domain {
-    display: none;
-  }
-
-  .known, .unknown {
     display: none;
   }
 

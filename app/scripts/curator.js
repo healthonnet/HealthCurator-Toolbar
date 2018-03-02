@@ -45,20 +45,17 @@ const curator = {
       document.querySelector('#curator-domain .stars-inner')
         .style.width = `${(Math.round(starPercentage / 10) * 10)}%`;
 
-      /* TODO add review count.
-
       $('#curator-domain .rating').append(
-        $('<span>').text('(1)')
+        $('<span>').text('(' + infos.reviewCount + ')')
       );
 
-       */
 
       chrome.runtime.sendMessage({
         msg: 'checkLogin',
         user_review: infos.user_review,
       });
     }).catch((e) => {
-      $('#curator .unknown').css('display', 'block');
+      $('.unknown').css('display', 'block');
     });
   },
 

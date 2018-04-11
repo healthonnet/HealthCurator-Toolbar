@@ -4,9 +4,6 @@ var currentTab;
 var query = {active: true, currentWindow: true};
 var langNav = navigator.language.substring(0,2);
 
-moment.locale(langNav);
-
-
 function initEvents() {
   $('body').on('submit', '#loginForm', (e) => {
     e.preventDefault();
@@ -62,8 +59,6 @@ function recoverPopup() {
       }
     );
     setInterval(function() {
-      console.log('save');
-
       chrome.storage.local.set({
         'review-title': $('#review-title').val(),
         'review-comment': $('#review-comment').val(),
@@ -96,8 +91,7 @@ chrome.runtime.onMessage.addListener(
       window.location = ''; // Refresh
     }
     if (request.msg === 'reviewSuccess') {
-      // Toast ?
-      curator.showEditReviewForm(request.user_review);
+      curator.showSuccess(request.user_review);
     }
   }
 );

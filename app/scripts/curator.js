@@ -1,5 +1,5 @@
 'use strict';
-var HEALTHCURATOR_ROOT = 'http://dev.healthcurator.org';
+var HEALTHCURATOR_ROOT = 'https://www.healthcurator.org';
 const curator = {
 
   getDomainFromUrl: function(link) {
@@ -189,7 +189,6 @@ const curator = {
   },
 
   showEditReviewForm: (review) => {
-    console.log(review);
     $('#mainPopup').html(
       $('<form>', {
         id: 'editReviewForm',
@@ -363,6 +362,34 @@ const curator = {
         }).text('Or create an Account')
       )
     );
+
+    if (reason) {
+      $('#mainPopup').append(
+        $('<div>', {
+          class: 'alert alert-danger alert-dismissible fade in',
+        }).append(
+          $('<a>', {
+            class: 'close',
+            href: '#',
+            'data-dismiss': 'alert',
+            'aria-label': 'close',
+          }).text('&times;')
+        ).append(
+          $('<strong>').text('Error : ')
+        ).text(reason)
+      );
+    }
+  },
+
+  showSuccess:(data) => {
+    $('#mainPopup').html(
+      $('<div>', {
+        class: 'alert alert-success'
+      }).append(
+        $('<strong>').text('Success !')
+      ).text('Your review has been sent.')
+    );
+
   },
 
 };

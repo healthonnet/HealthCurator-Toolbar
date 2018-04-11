@@ -5,7 +5,7 @@ function init() {
 }
 
 init();
-var HEALTHCURATOR_ROOT = 'http://dev.healthcurator.org';
+var HEALTHCURATOR_ROOT = 'https://www.healthcurator.org';
 
 if (chrome.omnibox) {
   chrome.omnibox.onInputEntered.addListener(function(text) {
@@ -25,7 +25,6 @@ function checkLogin(user_review) {
     if (!items.token || !items.username || !items.userid) {
       return chrome.runtime.sendMessage({
         msg: 'requireLogin',
-        reason: 'logout',
       });
     }
     return chrome.runtime.sendMessage({
@@ -45,13 +44,12 @@ function requestLogin(form) {
   xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
   xhr.onreadystatechange = function() {
     if (xhr.readyState === 4) {
-      var user = JSON.parse(xhr.response);
-      if (user.token) {
-        console.log(user);
+      var resp = JSON.parse(xhr.response);
+      if (resp.token) {
         chrome.storage.local.set({
-          token: user.token,
-          username: user.user.name,
-          userid: user.user.id,
+          token: resp.token,
+          username: resp.user.name,
+          userid: resp.user.id,
         }, function() {
 
           return chrome.runtime.sendMessage({
@@ -62,7 +60,7 @@ function requestLogin(form) {
         // Handle error
         return chrome.runtime.sendMessage({
           msg: 'requireLogin',
-          reason: 'fail',
+          reason: resp.error,
         });
       }
     }
@@ -74,7 +72,6 @@ function requestLogout() {
   chrome.storage.local.remove(['token', 'username', 'userid'], function() {
     return chrome.runtime.sendMessage({
       msg: 'requireLogin',
-      reason: 'logout',
     });
   });
 }
@@ -130,7 +127,6 @@ function postReview(form, url, token, review_id) {
 
       if (response.error) {
         refreshToken(token, function(newToken) {
-          console.log('retry');
           postReview(form, url, newToken);
         });
       }
